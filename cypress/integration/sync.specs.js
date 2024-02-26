@@ -50,11 +50,23 @@ describe('Esperas...', ()=>{
             //.should('contain', 'Item 2')        
    })
 
-   it.only('Click retry', ()=>{
+   it('Click retry', ()=>{
         cy.get('#buttonCount')
             .click()
             // para forçar um erro colocar o valor 111, para chegar ao 111 deveria ter mais um clique
             .should('have.value', '11')
+   })
+
+   it.only('Should vs Then', ()=> {
+        //cy.get('#buttonListDOM').click()
+        cy.get('#buttonListDOM').then($el =>{
+            //console.log($el)
+            expect($el).to.have.length(1)
+
+            //cy.get('#buttonList')
+        })
+    
+
    })
    
     
