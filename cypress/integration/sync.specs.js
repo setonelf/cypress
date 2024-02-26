@@ -17,7 +17,7 @@ describe('Esperas...', ()=>{
     cy.get('#novoCampo').type('funciona')
    })
 
-   it.only('Deve fazer retrys', () => {
+   it('Deve fazer retrys', () => {
     cy.get('#novoCampo').should('not.exist')
     cy.get('#buttonDelay').click()
     cy.get('#novoCampo').should('not.exist')
@@ -25,6 +25,17 @@ describe('Esperas...', ()=>{
         .should('exist')
         .type('funciona')
    })
+
+   it.only('Uso do find', ()=>{
+    cy.get('#buttonList').click()
+    cy.get('#lista li')
+        .find('span')
+        .should('contain', 'Item 1')
+    cy.get('#lista li span')
+        .should('contain', 'Item 2')
+   })
+
+   
     
     
 })
