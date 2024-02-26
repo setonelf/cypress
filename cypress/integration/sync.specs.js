@@ -47,11 +47,15 @@ describe('Esperas...', ()=>{
             .should('have.length', 1)
         cy.get('#lista li span')
             .should('have.length', 2)
-            //.should('contain', 'Item 2')
-
-        
+            //.should('contain', 'Item 2')        
    })
 
+   it.only('Click retry', ()=>{
+        cy.get('#buttonCount')
+            .click()
+            // para forçar um erro colocar o valor 111, para chegar ao 111 deveria ter mais um clique
+            .should('have.value', '11')
+   })
    
     
     
