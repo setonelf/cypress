@@ -1,9 +1,13 @@
 /// <reference types="cypress"/>
 
 describe('Work with alerts', ()=>{
+    let token
 
     before(()=>{
-        
+        cy.getToken('1234@email.com', '1234')
+            .then(tkn =>{
+                token = tkn
+            })
     })
 
     beforeEach(() => {
@@ -11,25 +15,16 @@ describe('Work with alerts', ()=>{
     })
 
     it('Should create an account', ()=>{
+       
         cy.request({
+            url: 'https://barrigarest.wcaquino.me/contas',
             method: 'POST',
-            url: 'https://barrigarest.wcaquino.me/signin',
-            body: {
-                email:'1234@email.com',
-                redirecionar: false,
-                senha: '1234'
+            headers: { Authorization:`JWT ${token}` },
+            body:{
+                nome: 'Conta via rest'
             }
-        }).its('body.token').should('not.be.empty')
-        .then(token =>{
-            cy.request({
-                url: 'https://barrigarest.wcaquino.me/contas',
-                method: 'POST',
-                headers: { Authorization:`JWT ${token}` },
-                body:{
-                    nome: 'Conta via rest'
-                }
-            }).as('response')
-        })
+        }).as('response')
+            
 
         cy.get('@response').then(res =>{
             expect(res.status).to.be.equal(201)
