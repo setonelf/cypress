@@ -56,3 +56,18 @@ Cypress.Commands.add('getToken', (user, passwd) =>{
         return token
     })
 })
+
+Cypress.Commands.add('getContaByName', name =>{
+    cy.getToken('1234@email.com', '1234').then(token =>{
+        cy.request({
+            method: 'GET',
+            url: "/contas",
+            headers: { Authorization:`JWT ${token}` },
+            qs:{
+                nome: name
+            }            
+        }).then(res => {
+           return res.body[0].id
+        })
+    })   
+})
