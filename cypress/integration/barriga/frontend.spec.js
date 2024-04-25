@@ -5,6 +5,11 @@ import '../../support/commandsContas'
 import { method } from 'bluebird'
 
 describe('Should test at a frontend level', () => {
+
+    after(()=>{
+        cy.clearLocalStorage()
+    })
+
     before(() => {
         cy.server()
         cy.route({
