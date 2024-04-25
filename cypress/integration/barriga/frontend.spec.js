@@ -42,12 +42,65 @@ describe('Should test at a frontend level', () => {
     })
 
     beforeEach(() => {
-        cy.resetRest()
         cy.get(loc.MENU.HOME).click()
     })
 
     it.only('Should create an account', () => {
+        cy.route({
+            method: 'GET',
+            url: '/contas',
+            response:[
+                {
+                    id: 1,
+                    nome: "Carteira",
+                    visivel: true,
+                    usuario_id: 1
+                },
+                {
+                    id: 2,
+                    nome: "Conta",
+                    visivel: true,
+                    usuario_id: 1
+                },
+                
+            ]
+        }).as('contas')
+
+        cy.route({
+            method: 'POST',
+            url: '/contas',
+            response:{id:1, nome:"Adicao", visivel:true, usuario_id:1}
+        }).as('contaAdicionada')
+
+
         cy.acessarMenuConta()
+
+        cy.route({
+            method: 'GET',
+            url: '/contas',
+            response:[
+                {
+                    id: 1,
+                    nome: "Carteira",
+                    visivel: true,
+                    usuario_id: 1
+                },
+                {
+                    id: 2,
+                    nome: "Conta",
+                    visivel: true,
+                    usuario_id: 1
+                },
+                {
+                    id: 3,
+                    nome: "Adicao",
+                    visivel: true,
+                    usuario_id: 1
+                },
+                
+            ]
+        }).as('contaSalva')
+
         cy.inserirConta('Conta de teste')
         cy.get(loc.MESSAGE).should('contain', 'Conta inserida com sucesso')
     })
