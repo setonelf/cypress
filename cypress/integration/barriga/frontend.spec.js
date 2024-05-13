@@ -81,6 +81,13 @@ describe('Should test at a frontend level', () => {
     })
 
     it('Should not create an account with same name', () => {
+        cy.route({
+            method: 'POST',
+            url: '/contas',
+            response:{"error":"Já existe um conta com esse nome!"},
+            status: 400
+        }).as('contaAdicionadaMesmoNome')
+        
         cy.acessarMenuConta()
 
         cy.get(loc.CONTAS.NOME).type('Conta mesmo nome')
