@@ -2,6 +2,7 @@
 
 import loc from '../../support/locators'
 import '../../support/commandsContas'
+import buildEnv from '../../support/buildEnv'
 import { method } from 'bluebird'
 
 describe('Should test at a frontend level', () => {
@@ -11,60 +12,17 @@ describe('Should test at a frontend level', () => {
     })
 
     before(() => {
-        cy.server()
-        cy.route({
-            method: 'POST',
-            url: '/signin',
-            response:{
-                id: 1000,
-                nome: 'Usuario Falso',
-                token: 'Uma string que nao deveria ser aceita mas vai'
-            }
-        }).as('signin')
-
-        cy.route({
-            method: 'GET',
-            url: '/saldo',
-            response:[
-                {
-                    conta_id: 999,
-                    conta: "Carteira",
-                    saldo: "100.00"
-                },
-                {
-                    conta_id: 9909,
-                    conta: "Banco",
-                    saldo: "1000000.00"
-                }
-            ]
-        }).as('saldo')
-        cy.login('1234@email.com', 'senha errada')
+        
     })
 
     beforeEach(() => {
+        buildEnv()
+        cy.login('1234@email.com', 'senha errada')
         cy.get(loc.MENU.HOME).click()
     })
 
     it('Should create an account', () => {
-        cy.route({
-            method: 'GET',
-            url: '/contas',
-            response:[
-                {
-                    id: 1,
-                    nome: "Carteira",
-                    visivel: true,
-                    usuario_id: 1
-                },
-                {
-                    id: 2,
-                    nome: "Conta",
-                    visivel: true,
-                    usuario_id: 1
-                },
-                
-            ]
-        }).as('contas')
+        
 
         cy.route({
             method: 'POST',
@@ -105,27 +63,7 @@ describe('Should test at a frontend level', () => {
         cy.get(loc.MESSAGE).should('contain', 'Conta inserida com sucesso')
     })
 
-    it.only('Should update an account', () => {
-        cy.route({
-            method: 'GET',
-            url: '/contas',
-            response:[
-                {
-                    id: 1,
-                    nome: "Carteira",
-                    visivel: true,
-                    usuario_id: 1
-                },
-                {
-                    id: 2,
-                    nome: "Conta",
-                    visivel: true,
-                    usuario_id: 1
-                },
-                
-            ]
-        }).as('contas')   
-
+    it('Should update an account', () => { 
         cy.route({
             method: 'PUT',
             url: '/contas/**',
