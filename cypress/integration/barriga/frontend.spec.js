@@ -95,7 +95,7 @@ describe('Should test at a frontend level', () => {
         cy.get(loc.MESSAGE).should('contain', 'code 400')
     })
 
-    it.only('Should create a transaction', () => {
+    it('Should create a transaction', () => {
         cy.route({
             method: 'POST',
             url: '/transacoes',
@@ -135,11 +135,22 @@ describe('Should test at a frontend level', () => {
         cy.xpath(loc.EXTRATO.FN_XP_BUSCA_ELEMENTO('Desc', '123')).should('exist')
     })
 
-    it('Should get balance', () => {
+    it.only('Should get balance', () => {
+        
+
         cy.get(loc.MENU.HOME).click()
-        cy.xpath(loc.SALDO.FN_XP_SALDO_CONTA('Conta para saldo')).should('contain', '534,00')
+        cy.xpath(loc.SALDO.FN_XP_SALDO_CONTA('Carteira')).should('contain', '100,00')
+
+        cy.route({
+            method: 'GET',
+            url: '/extrato/**',
+            response: 'fixture:movimentacaoSalva'
+        })
 
         cy.get(loc.MENU.EXTRATO).click()
+
+        
+
         cy.xpath(loc.EXTRATO.FN_XP_ALTERAR_ELEMENTO('Movimentacao 1, calculo saldo')).click()
         // cy.wait(1000)
         cy.get(loc.MOVIMENTACAO.DESCRICAO).should('have.value', 'Movimentacao 1, calculo saldo')
